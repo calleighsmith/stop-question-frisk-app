@@ -1,0 +1,12 @@
+name: stop-question-frisk
+title: stop-question-frisk
+username:
+account: calleigh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3974543
+bundleId: 4477750
+url: https://calleigh.shinyapps.io/stop-question-frisk/
+when: 1618527824.59107
+asMultiple: FALSE
+asStatic: FALSE

@@ -3,8 +3,10 @@ library(tidyverse)
 library(dplyr)
 library(sf)
 library(stringr)
+library(editData)
 
 source("data_wrangling_ec.R")
+col.range=c(-.8,.8)
 
 ui <- fluidPage(
     
@@ -54,22 +56,16 @@ ui <- fluidPage(
                 "The implications of SQF events can be severe for innocent individuals who are stopped as a result of racial profiling by the police, especially in light of current events surrounding police brutality and the Black Lives Matter movement. There have been numerous instances of innocent civilians, particularly black men, who have been wrongfully killed as a result of interactions with the police. In May 2020, the murder of George Floyd in Minneapolis brought to light widespread police brutality. A video of Minneapolis police officer Derek Chauvin kneeling on Floyd’s neck for 8 minutes and 46 seconds as Floyd called out \"I can’t breathe\" went viral, igniting protests globally in response to the systemic racism that permeates society 60 years after the civil rights movement in the US.",
                 br(),
                 br(),
-                "Therefore, it is as good a time as ever to understand how race impacts the criminal justice system, starting with how the police interact with civilians on the ground. The murky history of Stop-Question-Frisk requires that this practice be critically reviewed using the data available in order to monitor whether it is being used unjustly.</p>",
+                "In an unbiased world, the population percent by race and the SQF rate by race would be equivalent. Therefore, we calculated the difference in these two proportions by precinct (population rate - SQF rate). A negative difference would indicate that a racial group was stopped more frequently in a given precinct than one would expect based on the population of that racial group in the precinct, and vice versa.",
+                br(),
+                br(),
+                "To the right, select the year and race for which you are interested in exploring discrepancies in SQF events. </p>",
                 "<p>(Made by <a href='https://github.com/calleighsmith'>",
                 "@calleighsmith</a>. Source code ",
-                "<a href='https://github.com/sta323-523-sp21/exam_02_323-",
-                "calleighsmith'>on GitHub</a>.)</p>"
+                "<a href='https://github.com/calleighsmith/stop-question-frisk-app'>on GitHub</a>.)</p>"
             )),
             tags$br(),
             
-            selectInput("year", label = "Year", 
-                        choices = c(2017, 2018, 2019), 
-                        selected = 2019),
-            selectInput("race", label = "Race", 
-                        choices = c("Black" = "BLACK", 
-                                    "Hispanic" = "WHITE HISPANIC", 
-                                    "White" = "WHITE"), 
-                        selected = "Black"),
 
             width = 5
             
@@ -77,8 +73,18 @@ ui <- fluidPage(
         mainPanel(
             
             tags$br(),
+          
             
-            plotOutput("plot"),
+            selectInput3("year", label = "Year", 
+                                 choices = c(2017, 2018, 2019), 
+                                 selected = 2019),
+            selectInput3("race", label = "Race", 
+                                 choices = c("Black" = "BLACK", 
+                                             "Hispanic" = "WHITE HISPANIC", 
+                                             "White" = "WHITE"), 
+                                 selected = "Black"),
+            
+            plotOutput("plot", width = "700px", height = "700px"),
             
             width = 7
             
@@ -100,9 +106,9 @@ server <- function(input, output) {
 
     ggplot(res) + 
       geom_sf(aes(fill = diff_pc, geometry = geometry)) +
-      scale_fill_gradient(low = "lightpink", high = "lightgreen") +
+      scale_fill_gradientn(colors = c("lightpink", "lightgreen"), limits=col.range) +
       theme_bw() +
-      labs(title = paste0("Discrepancies in SQF Rates for ", str_to_title(input$race), " in ", input$year),
+      labs(title = paste0("Discrepancies in SQF Rates for the ", str_to_title(input$race), " Population in ", input$year),
         fill = "Difference in Proportions\n(Precinct Population Rate\n- Precinct SQF Rate)")+
       theme(
         axis.ticks = element_blank(),
