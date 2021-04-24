@@ -5,8 +5,8 @@ account: calleigh
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3974543
-bundleId: 4477750
+bundleId: 4515082
 url: https://calleigh.shinyapps.io/stop-question-frisk/
-when: 1618527824.59107
+when: 1619307863.42981
 asMultiple: FALSE
 asStatic: FALSE

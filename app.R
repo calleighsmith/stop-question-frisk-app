@@ -102,11 +102,11 @@ server <- function(input, output) {
     res <- master_1_group %>%
       filter(SUSPECT_RACE_DESCRIPTION == input$race,
              YEAR2 == input$year)
-    print(head(res))
+    print(nrow(res))
 
     ggplot(res) + 
       geom_sf(aes(fill = diff_pc, geometry = geometry)) +
-      scale_fill_gradientn(colors = c("lightpink", "lightgreen"), limits=col.range) +
+      scale_fill_gradient2(low = "#ffeda0", mid = "#f5f5f5", high = "#018571", limits=col.range) +
       theme_bw() +
       labs(title = paste0("Discrepancies in SQF Rates for the ", str_to_title(input$race), " Population in ", input$year),
         fill = "Difference in Proportions\n(Precinct Population Rate\n- Precinct SQF Rate)")+
